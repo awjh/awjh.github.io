@@ -1,0 +1,22 @@
+	"users": [
+		{
+			"name": "Nigel Hurt",
+			"teams": ["Albania", "Austria", "Northern Ireland", "Russia", "Spain"]
+		},
+		{
+			"name": "Andrew Hurt",
+			"teams": ["Germany", "Iceland", "Republic of Ireland", "Sweden", "Ukraine"]
+		},
+		{
+			"name": "Alison Hurt",
+			"teams": ["Belgium", "Poland", "Portugal", "Slovakia"]
+		},
+		{
+			"name": "Vanessa Hurt",
+			"teams": ["Croatia", "Finland", "Italy", "Switzerland", "Italy"]
+		},
+		{
+			"name": "Annabel Blatch",
+			"teams": ["Czech Republic", "France", "Hungary", "Romania", "Wales"]
+		}
+	]	

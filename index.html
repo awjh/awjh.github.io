@@ -1,0 +1,482 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Overview</title>
+<script   src="https://code.jquery.com/jquery-1.12.4.js"   integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="   crossorigin="anonymous"></script>
+<script>
+var json = {
+					"users": [
+						{
+							"name": "Nigel Hurt",
+							"teams": ["Albania", "Austria", "Northern Ireland", "Russia", "Spain"]
+						},
+						{
+							"name": "Andrew Hurt",
+							"teams": ["Germany", "Iceland", "Republic of Ireland", "Sweden", "Ukraine"]
+						},
+						{
+							"name": "Alison Hurt",
+							"teams": ["Belgium", "Poland", "Portugal", "Slovakia"]
+						},
+						{
+							"name": "Vanessa Hurt",
+							"teams": ["Croatia", "England", "Turkey", "Italy", "Switzerland",]
+						},
+						{
+							"name": "Annabel Blatch",
+							"teams": ["Czech Republic", "France", "Hungary", "Romania", "Wales"]
+						}
+					],	
+					"teams" : {
+						"Albania": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Austria": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Belgium": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Croatia": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Czech Republic": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"England": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"France": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Germany": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Hungary": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Iceland": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Italy": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Northern Ireland": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Poland": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Portugal": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Republic of Ireland": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Romania": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Russia": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Slovakia": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Spain": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Sweden": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Switzerland": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Turkey": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Ukraine": {
+							"goals_scored": 0,
+							"points_scored": 0
+						},
+						"Wales": {
+							"goals_scored": 0,
+							"points_scored": 0
+						}
+					}
+				}
+var colours = ["#85c2eb", "#b3ce56", "#5fbeb7", "#9071b0", "#e94792"]
+
+$(document).ready(function(e) {
+	for(var i = json.users.length-1; i >= 0; i--)
+	{
+		$("body").prepend("<div class='user' ><div class='userBubble' style='background-image:url(\"Images/"+json.users[i].name.toLowerCase().split(' ').join('_')+".png\"); background-color:"+colours[i]+"'></div><br /><span>"+json.users[i].name+"</span></div>")
+	}
+	
+	$.ajax({
+		  headers: { 'X-Auth-Token': '43e2645aff8f4f838d18ccfbb2c04610' },
+		  url: 'http://api.football-data.org/v1/soccerseasons/424/fixtures',
+		  dataType: 'json',
+		  type: 'GET',
+	}).done(function(d) {
+		getGoalsScored(d)
+		getAveragePoints(d)
+	});
+	
+});
+
+function focusUser(el, user_number)
+{
+	$('body *').not($(el)).not($(el).children('.userBubble')).animate({
+		opacity: 0
+	}, 1000)
+	setTimeout(function(){getTeams(el, user_number)}, 1000)
+}
+
+function getTeams(el, user_number)
+{
+	$(el).append('<br />')
+	for(var i =0; i < json.users[user_number].teams.length; i++)
+	{
+		$(el).append('<div class="usersTeam" style="background-image:url(\'Images/Teams/'+json.users[user_number].teams[i].toLowerCase().split(' ').join('_')+'.png\')"></div>')
+	}
+}
+
+function getGoalsScored(d)
+{	
+	var teams = json.teams;
+	for(var i = 0; i < d.fixtures.length; i++)
+	{
+		if(d.fixtures[i].status == "FINISHED")
+		{
+			teams[d.fixtures[i].homeTeamName].goals_scored = d.fixtures[i].result.goalsHomeTeam
+			teams[d.fixtures[i].awayTeamName].goals_scored = d.fixtures[i].result.goalsAwayTeam
+		}
+	}
+	goals_scored_json = []
+	for (var key in json.teams)
+		  goals_scored_json.push([key, json.teams[key].goals_scored])
+	goals_scored_json.sort(function(a, b) {return b[1] - a[1]})
+	var i =0
+	$('#goals_Scored tbody tr').each(function(){
+		$(this).children('.team_name').html(goals_scored_json[i][0])
+		for(var j = 0; j < json.users.length; j++)
+		{
+			for(var k = 0; k < json.users[j].teams.length; k++)
+			{
+				if(json.users[j].teams[k] == goals_scored_json[i][0])
+				{
+						$(this).children('.team_name').append('<div class="markTeam" style="background-color:'+colours[j]+'" ></div>')
+				}
+			}
+		}
+		$(this).children('.value').html(goals_scored_json[i][1])
+		i++
+	})	
+}
+
+function getAveragePoints(d)
+{
+	var points = {};
+	for(var i = 0; i < json.users.length; i++)
+	{
+		points[json.users[i].name] = 0
+	}
+	
+	for(var i = 0; i < d.fixtures.length; i++)
+	{
+		if(d.fixtures[i].status == "FINISHED")
+		{
+			var homePoints;
+			var awayPoints; 
+			if(d.fixtures[i].result.goalsHomeTeam == d.fixtures[i].result.goalsAwayTeam)
+			{
+				homePoints = 1;
+				awayPoints = 1;
+			}
+			else if(d.fixtures[i].result.goalsHomeTeam > d.fixtures[i].result.goalsAwayTeam)
+			{
+				homePoints = 3;
+				awayPoints = 0;
+			}
+			else if(d.fixtures[i].result.goalsHomeTeam < d.fixtures[i].result.goalsAwayTeam)
+			{
+				homePoints = 0;
+				awayPoints = 3;
+			}
+			
+			for(var j = 0; j < json.users.length; j++)
+			{
+				for(var k = 0; k < json.users[j].teams.length; k++)
+				{
+					if(json.users[j].teams[k] == d.fixtures[i].homeTeamName)
+					{
+						points[json.users[j]] += homePoints
+					}
+					if(json.users[j].teams[k] == d.fixtures[i].awayTeamName)
+					{
+						points[json.users[j]] += awayPoints
+					}
+				}
+			}
+				
+		}
+	}
+	var sortable = [];
+	for (var key in points)
+		  sortable.push([key, points[key]])
+	sortable.sort(function(a, b) {return a[1] - b[1]})
+	var i = 0;
+	$('#points_Scored tbody tr').each(function(){
+		$(this).children('.team_name').html(sortable[i][0])
+		$(this).children('.value').html(goals_scored_json[i][1]/4)
+		i++
+	})	
+}
+
+</script>
+<style>
+	@font-face {
+		font-family: 'robotothin';
+		src: url('Fonts/Roboto/roboto-thin-webfont.eot');
+		src: url('Fonts/Roboto/roboto-thin-webfont.eot?#iefix') format('embedded-opentype'),
+			 url('Fonts/Roboto/roboto-thin-webfont.woff2') format('woff2'),
+			 url('Fonts/Roboto/roboto-thin-webfont.woff') format('woff'),
+			 url('Fonts/Roboto/roboto-thin-webfont.ttf') format('truetype'),
+			 url('Fonts/Roboto/roboto-thin-webfont.svg#robotothin') format('svg');
+		font-weight: normal;
+		font-style: normal;
+	
+	}
+	body
+	{
+		text-align:center;
+		font-family: 'robotothin';
+	}
+	.user
+	{
+		color: #666;
+		display:inline-block;	
+		text-align:center;
+		margin-left:25px;
+		margin-right:25px;
+		margin-top:50px;
+		text-align:center;
+		font-size: 1.2em;
+	}
+	.userBubble
+	{
+		height: 100px;
+		width: 100px;
+		border-radius:50%;
+		background-repeat:no-repeat;
+		background-position:center;
+		display:inline-block;
+		cursor:pointer;
+	}
+	.usersTeam
+	{
+		margin-left:15px;
+		margin-right: 15px;
+		display:inline-block;
+		height: 64px;
+		width: 64px;
+		border-radius:50%;
+		background-color: #CCC;
+		cursor:pointer;
+	}
+	.tally_tables
+	{
+		margin-top:50px;
+		display:inline-block;
+		width: 425px;
+		border: 3px solid;
+		border-collapse:collapse;
+		margin-left: 25px;
+		margin-right:25px;
+	}
+	.tally_tables th
+	{
+		text-align:left;
+		color: #ededed;
+		font-size: 1.2em;
+		line-height:40px;
+	}
+	.tally_tables td
+	{
+		font-size: 0.8em;
+		line-height:40px;
+		border-bottom:2px solid #9d9d9c;
+		color: #666;
+	}
+	.tally_tables tr:last-child td
+	{
+		border-bottom:0;
+	}
+	.tally_tables tbody tr:nth-child(even) {
+		background-color: #f6f6f6;
+	}
+	.tally_tables tbody tr:nth-child(odd) {
+		background-color: #ededed;
+	}
+	.position
+	{
+		width: 40px;
+		border-right:2px solid #9d9d9c;
+	}
+	.team_name
+	{
+		width: 340px;
+		border-right:2px solid #9d9d9c;	
+		text-align:left;
+		padding-left: 5px;
+	}
+	.value
+	{
+		width: 40px;
+	}
+	#goals_Scored
+	{
+		background-color: #f39675;
+		border-color: #f39675;
+	}
+	#points_Scored
+	{
+		background-color: #ea5154;
+		border-color: #ea5154;
+	}
+	.markTeam
+	{
+		display:inline-block;
+		float:right;
+		margin-right: 10px;
+		height: 20px;
+		width: 20px;
+		border-radius:50%;
+		margin-top:10px;
+	}
+	#viewStandings
+	{
+		line-height:40px;
+		background-color: #68a4d9;
+		display:inline-block;
+		text-align:center;
+		padding-left: 10px;
+		color: #FFF;
+		margin-top: 50px;
+		font-size: 1.2em;
+		cursor:pointer;
+	}
+	#viewStandings span
+	{
+		display:inline-block;
+		width: 40px;
+		background-color: #5c92cd;
+		margin-left: 10px;
+	}
+	#logo
+	{
+		margin-top: 50px;	
+	}
+</style>
+</head>
+	<br />
+	<table class="tally_tables" id="goals_Scored">
+    	<thead>
+        	<tr>
+        		<th colspan="3">Goals Scored</th>
+       		</tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="position">1</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">2</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">3</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">4</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">5</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+    	<tbody>
+    </table>
+    <table class="tally_tables" id="points_Scored">
+    	<thead>
+        	<tr>
+        		<th colspan="3">Average Points</th>
+       		</tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="position">1</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">2</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">3</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">4</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+            <tr>
+                <td class="position">5</td>
+                <td class="team_name"></td>
+                <td class="value"></td>
+            </tr>
+    	</tbody>
+    </table>
+    <br />
+    <div id="viewStandings" onClick="window.open('http://www.uefa.com/uefaeuro/season=2016/standings/')">
+    	View Standings<span>&gt;</span>
+    </div>
+    <br />
+    <img id="logo" src="Images/official_logo.svg" width="183" height="258" />
+<body>
+</body>
+</html>
