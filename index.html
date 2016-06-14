@@ -380,25 +380,33 @@ function getAveragePoints(d)
 				{
 					if(json.users[j].teams[k] == d.fixtures[i].homeTeamName)
 					{
-						points[json.users[j]] += homePoints
+						points[json.users[j].name] += homePoints
 					}
 					if(json.users[j].teams[k] == d.fixtures[i].awayTeamName)
 					{
-						points[json.users[j]] += awayPoints
+						points[json.users[j].name] += awayPoints
 					}
 				}
 			}
 				
 		}
 	}
+	
+	for(var j = 0; j < json.users.length; j++)
+	{
+		console.log(json.users[j].name+': '+points[json.users[j].name]+'.....'+json.users[j].teams.length)
+
+		points[json.users[j].name] = points[json.users[j].name]/json.users[j].teams.length
+		points[json.users[j].name] = Math.round(points[json.users[j].name] * 10) / 10
+	}
 	var sortable = [];
 	for (var key in points)
 		  sortable.push([key, points[key]])
-	sortable.sort(function(a, b) {return a[1] - b[1]})
+	sortable.sort(function(a, b) {return b[1] - a[1]})
 	var i = 0;
 	$('#points_Scored tbody tr').each(function(){
 		$(this).children('.team_name').html(sortable[i][0])
-		$(this).children('.value').html(goals_scored_json[i][1]/4)
+		$(this).children('.value').html(sortable[i][1])
 		i++
 	})	
 }
