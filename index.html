@@ -212,6 +212,10 @@ function focusUser(el, user_number)
 		opacity: 1
 	}, 1000)
 	
+	$('#goBack').animate({
+		opacity: 0
+	}, 1000)
+	
 	$('table').fadeOut(1000);
 	$('#viewStandings').fadeOut(1000)
 	
@@ -236,8 +240,7 @@ function showNormal(el, user_number)
 
 function getTeams(el, user_number)
 {
-	$(el).append('<br id="spcer" />')
-	$('body').append('<div id="goBack" onClick="showNormal()"><span>&lt;</span> Back</div><br />')
+	$('body').append('<div id="goBack" onClick="showNormal()"><span>&lt;</span> Back</div><br id="spcer" />')
 	for(var i =0; i < json.users[user_number].teams.length; i++)
 	{
 		$('body').append('<div class="usersTeam"><img src="Images/Teams/'+json.users[user_number].teams[i].toLowerCase().split(' ').join('_')+'.png" width="64"/><span class="usersTeamName">'+json.users[user_number].teams[i]+'</span><br /><span class="teamGoalsScored" >Goals Scored: '+json.teams[json.users[user_number].teams[i]].goals_scored+'</span><span class="teamPointsScored" >Points Scored: '+json.teams[json.users[user_number].teams[i]].points_scored+'</span><br /><span class="teamsResults" >Results: </span><br /><span class="nextGame">Next Game: '+json.teams[json.users[user_number].teams[i]].next_game+'</span></div>');
@@ -678,10 +681,6 @@ function getAveragePoints(d)
     	View Standings<span>&gt;</span>
     </div>
     <br />
-<<<<<<< HEAD
-=======
-    <!---<img id="logo" src="Images/official_logo.svg" width="183" height="258" />--->
->>>>>>> a1c2189b4baa12a6a7dfc481c8358b80266e53fd
 <body>
 </body>
 </html>
