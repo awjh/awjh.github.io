@@ -2,6 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Overview</title>
 <script   src="https://code.jquery.com/jquery-1.12.4.js"   integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="   crossorigin="anonymous"></script>
 <script>
@@ -31,108 +32,157 @@ var json = {
 					"teams" : {
 						"Albania": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Austria": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Belgium": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Croatia": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Czech Republic": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"England": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"France": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Germany": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Hungary": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Iceland": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Italy": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Northern Ireland": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Poland": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Portugal": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Republic of Ireland": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Romania": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Russia": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Slovakia": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Spain": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Sweden": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Switzerland": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Turkey": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Ukraine": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						},
 						"Wales": {
 							"goals_scored": 0,
-							"points_scored": 0
+							"points_scored": 0,
+							"fixtures": [],
+							"next_game": ""
 						}
 					}
 				}
 var colours = ["#85c2eb", "#b3ce56", "#5fbeb7", "#9071b0", "#e94792"]
 
+
 $(document).ready(function(e) {
 	for(var i = json.users.length-1; i >= 0; i--)
 	{
-		$("body").prepend("<div class='user' ><div class='userBubble' style='background-image:url(\"Images/"+json.users[i].name.toLowerCase().split(' ').join('_')+".png\"); background-color:"+colours[i]+"'></div><br /><span>"+json.users[i].name+"</span></div>")
+		$("body").prepend("<div class='user' onclick='focusUser(this, "+i+")' ><div class='userBubble' style='background-image:url(\"Images/"+json.users[i].name.toLowerCase().split(' ').join('_')+".png\"); background-color:"+colours[i]+"'></div><br /><span>"+json.users[i].name+"</span></div>")
 	}
 	
 	$.ajax({
@@ -143,24 +193,115 @@ $(document).ready(function(e) {
 	}).done(function(d) {
 		getGoalsScored(d)
 		getAveragePoints(d)
+		get_results(d)
+		get_next_games(d)
 	});
 	
 });
 
 function focusUser(el, user_number)
 {
-	$('body *').not($(el)).not($(el).children('.userBubble')).animate({
+	$('.usersTeam').fadeOut(1000)
+	setTimeout(function(){$('.usersTeam').remove(); $('#spcer').remove(); $('#goBack').remove();}, 1000)
+	
+	$('.user').not($(el)).not($(el).children('.userBubble')).animate({
+		opacity: 0.2
+	}, 1000)
+	
+	$(el).animate({
+		opacity: 1
+	}, 1000)
+	
+	$('table').fadeOut(1000);
+	$('#viewStandings').fadeOut(1000)
+	
+	setTimeout(function(){getTeams(el, user_number)}, 1000)
+	
+}
+
+function showNormal(el, user_number)
+{
+	$('.usersTeam').fadeOut(1000)
+	setTimeout(function(){$('.usersTeam').remove(); $('#spcer').remove(); $('#goBack').fadeOut(1000);}, 1000)
+	$('.users').animate({
+		opacity: 1
+	}, 1000)
+	
+	$('#goBack').animate({
 		opacity: 0
 	}, 1000)
-	setTimeout(function(){getTeams(el, user_number)}, 1000)
+	
+	setTimeout(function(){$('table').fadeIn(1000); $('#viewStandings').fadeIn(1000)}, 1000)
 }
 
 function getTeams(el, user_number)
 {
-	$(el).append('<br />')
+	$(el).append('<br id="spcer" />')
+	$('body').append('<div id="goBack" onClick="showNormal()"><span>&lt;</span> Back</div><br />')
 	for(var i =0; i < json.users[user_number].teams.length; i++)
 	{
-		$(el).append('<div class="usersTeam" style="background-image:url(\'Images/Teams/'+json.users[user_number].teams[i].toLowerCase().split(' ').join('_')+'.png\')"></div>')
+		$('body').append('<div class="usersTeam"><img src="Images/Teams/'+json.users[user_number].teams[i].toLowerCase().split(' ').join('_')+'.png" width="64"/><span class="usersTeamName">'+json.users[user_number].teams[i]+'</span><br /><span class="teamGoalsScored" >Goals Scored: '+json.teams[json.users[user_number].teams[i]].goals_scored+'</span><span class="teamPointsScored" >Points Scored: '+json.teams[json.users[user_number].teams[i]].points_scored+'</span><br /><span class="teamsResults" >Results: </span><br /><span class="nextGame">Next Game: '+json.teams[json.users[user_number].teams[i]].next_game+'</span></div>');
+		
+		var max_results = 0;
+		for(key in json.teams)
+		{
+			if(json.teams.hasOwnProperty(key))
+			{
+					if(json.teams[key].fixtures.length > max_results)
+					{
+						max_results = json.teams[key].fixtures.length
+					}
+			}
+		}
+		
+		for(var j = 0; j < max_results; j++)
+		{
+			if(typeof json.teams[json.users[user_number].teams[i]].fixtures[j] !== 'undefined')
+			{
+				$('.usersTeam:last-child').children('.teamsResults').append('<span class="teamsResult" ><img src="Images/Teams/'+json.users[user_number].teams[i].toLowerCase().split(' ').join('_')+'.png" width="16"/> '+json.teams[json.users[user_number].teams[i]].fixtures[j].for+' - '+json.teams[json.users[user_number].teams[i]].fixtures[j].against+' <img src="Images/Teams/'+json.teams[json.users[user_number].teams[i]].fixtures[j].played.toLowerCase().split(' ').join('_')+'.png" width="16"/></span>')
+			}
+			else
+			{
+				$('.usersTeam:last-child').children('.teamsResults').append('<span class="spacerResult" ><img src="Images/Teams/white.png" width="16"/>N/A</span>')
+			}
+		}
+		
+	}
+	
+	$('.usersTeam').css({
+        opacity: 0,
+        display: 'inline-block'     
+    }).animate({opacity:1},600);
+	
+	$('#goBack').animate({
+		opacity: 1
+	}, 1000)
+	
+}
+
+function get_next_games(d)
+{
+	var teams = json.teams;
+	for(var i = 0; i < d.fixtures.length; i++)
+	{
+		if(d.fixtures[i].status == "TIMED" && teams[d.fixtures[i].homeTeamName].next_game == "")
+		{
+			teams[d.fixtures[i].homeTeamName].next_game = d.fixtures[i].awayTeamName
+			teams[d.fixtures[i].awayTeamName].next_game = d.fixtures[i].homeTeamName
+		}
+	}
+}
+
+function get_results(d)
+{
+	var teams = json.teams;
+	for(var i = 0; i < d.fixtures.length; i++)
+	{
+		if(d.fixtures[i].status == "FINISHED")
+		{
+			teams[d.fixtures[i].homeTeamName].fixtures.push({"for": d.fixtures[i].result.goalsHomeTeam, "against": d.fixtures[i].result.goalsAwayTeam, "played": d.fixtures[i].awayTeamName})
+			teams[d.fixtures[i].awayTeamName].fixtures.push({"for": d.fixtures[i].result.goalsAwayTeam, "against": d.fixtures[i].result.goalsHomeTeam, "played": d.fixtures[i].homeTeamName})
+		}
 	}
 }
 
@@ -226,6 +367,9 @@ function getAveragePoints(d)
 				homePoints = 0;
 				awayPoints = 3;
 			}
+			
+			json.teams[d.fixtures[i].homeTeamName].points_scored += homePoints;
+			json.teams[d.fixtures[i].awayTeamName].points_scored += awayPoints;
 			
 			for(var j = 0; j < json.users.length; j++)
 			{
@@ -298,14 +442,72 @@ function getAveragePoints(d)
 	}
 	.usersTeam
 	{
-		margin-left:15px;
-		margin-right: 15px;
+		margin-left:40px;
+		margin-right: 40px;
+		margin-top: 50px;
 		display:inline-block;
-		height: 64px;
-		width: 64px;
+		width: 425px;
+		cursor:pointer;
+		color: #666;
+		font-size:1.2em;
+		text-align:left;
+		display:none;
+	}
+	.usersTeam img
+	{
 		border-radius:50%;
 		background-color: #CCC;
+		margin-top:32px;
+	}
+	.usersTeam span
+	{
+		display:block;
+		margin-left: 75px;
+	}
+	.usersTeamName
+	{
+		margin-left: 72px!important;	
+		margin-top:-64px!important;
+		font-size: 2em;
+	}
+	.teamGoalsScored
+	{
+		margin-top:-20px;	
+	}
+	.teamsResult
+	{
+		margin-left:0!important;	
+		margin-top: -20px;
+	}
+	.spacerResult
+	{
+		margin-left:0!important;	
+		margin-top: -20px;
+		color: #FFF;
+	}
+	.spacerResult img
+	{
+		opacity: 0;
+	}
+	#goBack
+	{
+		line-height:40px;
+		background-color: #68a4d9;
+		display:inline-block;
+		text-align:center;
+		padding-right: 10px;
+		color: #FFF;
+		margin-top: 50px;
+		font-size: 1.2em;
 		cursor:pointer;
+		opacity: 0;
+	}
+	#goBack span
+	{
+		display:inline-block;
+		width: 40px;
+		background-color: #5c92cd;
+		margin-right:5px;
 	}
 	.tally_tables
 	{
@@ -314,8 +516,8 @@ function getAveragePoints(d)
 		width: 425px;
 		border: 3px solid;
 		border-collapse:collapse;
-		margin-left: 25px;
-		margin-right:25px;
+		margin-left: 12.5px;
+		margin-right: 12.5px;
 	}
 	.tally_tables th
 	{
@@ -476,7 +678,6 @@ function getAveragePoints(d)
     	View Standings<span>&gt;</span>
     </div>
     <br />
-    <img id="logo" src="Images/official_logo.svg" width="183" height="258" />
 <body>
 </body>
 </html>
