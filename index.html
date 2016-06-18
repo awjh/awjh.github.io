@@ -182,7 +182,7 @@ var colours = ["#85c2eb", "#b3ce56", "#5fbeb7", "#9071b0", "#e94792"]
 $(document).ready(function(e) {
 	for(var i = json.users.length-1; i >= 0; i--)
 	{
-		$("body").prepend("<div class='user' onclick='focusUser(this, "+i+")' ><div class='userBubble' style='background-image:url(\"Images/"+json.users[i].name.toLowerCase().split(' ').join('_')+".png\"); background-color:"+colours[i]+"'></div><br /><span>"+json.users[i].name+"</span></div>")
+		$("body").prepend("<div class='user' ><div class='userBubble' onclick='focusUser(this, "+i+")' style='background-image:url(\"Images/"+json.users[i].name.toLowerCase().split(' ').join('_')+".png\"); background-color:"+colours[i]+"'></div><br /><span>"+json.users[i].name+"</span></div>")
 	}
 	
 	$.ajax({
