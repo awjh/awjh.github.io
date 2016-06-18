@@ -315,8 +315,8 @@ function getGoalsScored(d)
 	{
 		if(d.fixtures[i].status == "FINISHED")
 		{
-			teams[d.fixtures[i].homeTeamName].goals_scored = d.fixtures[i].result.goalsHomeTeam
-			teams[d.fixtures[i].awayTeamName].goals_scored = d.fixtures[i].result.goalsAwayTeam
+			teams[d.fixtures[i].homeTeamName].goals_scored += d.fixtures[i].result.goalsHomeTeam
+			teams[d.fixtures[i].awayTeamName].goals_scored += d.fixtures[i].result.goalsAwayTeam
 		}
 	}
 	goals_scored_json = []
