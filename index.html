@@ -4,14 +4,18 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Standings</title>
-	<script src="Utils/jquery-3.3.1.min.js"></script>
+	<script src="Utils/jquery-3.3.1.min.js" ></script>
+	<script src="main.js" ></script>
 	<link rel = "stylesheet" type = "text/css" href = "main.css" />
   </head>
 </head>
 <body>
 	<div id="holder" >
 		<div id="header" >
-			Hurt Family - World Cup 2018
+			<span class="title" >Hurt Family - World Cup 2018</span>
+			<div id="nav-button" onclick="handleNavBar()" >
+				&#9776;
+			</div>
 			<div id="nav" >
 				<span>Alison</span>
 				<span>Andy</span>
@@ -90,6 +94,34 @@
 						<span>Argentina (Alison)</span>
 						<span>11</span>
 					</div>
+				</div>
+			</div>
+			
+			<div class="stats" id="upcoming-matches" >
+				<div class="title" >
+					Upcoming Matches:
+				</div>
+				<br />
+				<div class="stats-list" >
+					<div class="item" >England (Annabel) Vs Egypt (Andrew)</div>
+					<div class="item" >France (Mum) Vs Brazil (Dad)</div>
+					<div class="item" >Argentina (Alison) Vs Germany (Gareth)</div>
+					<div class="item" >Panama (Jamie) Vs Nigeria (Andrew)</div>
+					<div class="item" >Spain (Annabel) Vs Portugal (Dad)</div>
+				</div>
+			</div>
+
+			<div class="stats" id="previous-results" >
+				<div class="title" >
+					Previous Results:
+				</div>
+				<br />
+				<div class="stats-list" >
+					<div class="item" >England (Annabel) 0 - 0 Egypt (Andrew)</div>
+					<div class="item" >France (Mum) 1 - 2 Brazil (Dad)</div>
+					<div class="item" >Argentina (Alison) 3 - 3 Germany (Jamie)</div>
+					<div class="item" >Panama (Gareth) 0 - 2 Nigeria (Andrew)</div>
+					<div class="item" >Spain (Annabel) 3 - 0 Portugal (Dad)</div>
 				</div>
 			</div>
 		</div>
