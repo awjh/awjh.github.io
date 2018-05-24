@@ -83,6 +83,11 @@ body {
     background-color: #0F0;
 }
 
+.stats > .no-display {
+    display: none;
+    padding: 0 4pt;
+}
+
 .stats > .stats-table {
     position: relative;
     display: inline-block;
@@ -114,9 +119,8 @@ body {
 .stats > .stats-table > .row {
     padding: 4pt 0;
     display: flex;
+    text-transform: capitalize;
 }
-
-
 
 .stats > .stats-table > .row:not(:last-child) {
     border-bottom: 1pt solid #000;
@@ -153,6 +157,7 @@ body {
 
 .stats > .stats-list > .item {
     padding: 7.4pt 0;
+    text-transform: capitalize;
 }
 
 @media only screen and (max-width: 975pt) {
