@@ -19,6 +19,21 @@ body {
     font-size: 16pt;
 }
 
+#header > a {
+    text-decoration: none;
+    color: #000;
+}
+
+#header > a:active {
+    text-decoration: none;
+    color: #000;
+}
+
+#header > a:visited {
+    text-decoration: none;
+    color: #000;
+}
+
 #nav-button {
     position: absolute;
     font-size: 12pt;
@@ -35,18 +50,30 @@ body {
     top: 14pt;
 }
 
-#nav > span {
+#nav > a {
     display: inline-block;
     padding-left: 12pt;
     margin-left: 12pt;
-    cursor: pointer;
+    text-decoration: none;
+    color: #000;
+    text-transform: capitalize;
 }
 
-#nav > span:hover {
+#nav > a:active {
+    text-decoration: none;
+    color: #000;
+}
+
+#nav > a:visited {
+    text-decoration: none;
+    color: #000;
+}
+
+#nav > a:hover {
     text-decoration: underline;
 }
 
-#nav > span:not(:first-child) {
+#nav > a:not(:first-child) {
     border-left: 1pt solid #000;
 }
 
@@ -137,6 +164,7 @@ body {
 
 .stats > .stats-table > .row > span:nth-child(2) {
     flex: 1;
+    min-width: 120pt;
 }
 
 .stats > .stats-table > .row > span:first-child {
@@ -179,7 +207,7 @@ body {
         display: none;
     }
 
-    #nav > span {
+    #nav > a {
         display: block;
         padding: 4pt 0;
         margin-left: 0;

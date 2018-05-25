@@ -5,6 +5,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Standings</title>
 	<script src="Utils/jquery-3.3.1.min.js" ></script>
+	<script src="Utils/shared.js" ></script>
 	<script src="index.js" ></script>
 	
 	<link rel = "stylesheet" type = "text/css" href = "main.css" />
@@ -13,21 +14,11 @@
 <body>
 	<div id="holder" >
 		<div id="header" >
-			<span class="title" >Hurt Family - World Cup 2018</span>
+			<a class="title" href="index.html" >Hurt Family - World Cup 2018</a>
 			<div id="nav-button" onclick="handleNavBar()" >
 				&#9776;
 			</div>
-			<div id="nav" >
-				<span>Alison</span>
-				<span>Andy</span>
-				<span>Annabel</span>
-				<span>Alison</span>
-				<span>Dad</span>
-				<span>Gareth</span>
-				<span>Jamie</span>
-				<span>Michael</span>
-				<span>Mum</span>
-			</div>
+			<div id="nav" ></div>
 		</div>
 		<div id="standings-holder" >
 			<div class="stats" id="goals-scored" >
