@@ -59,6 +59,11 @@ function getGoalsScored(teams, data) {
     data.forEach((game) => {
         teams[game.homeTeamName].goals_scored += game.result.goalsHomeTeam;
         teams[game.awayTeamName].goals_scored += game.result.goalsAwayTeam;
+
+        if (game.result.extraTime) {
+            teams[game.homeTeamName].goals_scored += game.result.extraTime.goalsHomeTeam;
+            teams[game.awayTeamName].goals_scored += game.result.extraTime.goalsAwayTeam;
+        }
     });
 }
 
@@ -93,8 +98,8 @@ function getWinnerFromResult(game) {
         return_object.away.resultType = 'W';
     } else {
         if (game.result.extraTime) {
-            return_object.home.goals = {for: game.result.extraTime.goalsHomeTeam, against: game.result.extraTime.goalsAwayTeam};
-            return_object.away.goals = {for: game.result.extraTime.goalsAwayTeam, against: game.result.extraTime.goalsHomeTeam};
+            return_object.home.goals = {for: game.result.goalsHomeTeam + game.result.extraTime.goalsHomeTeam, against: game.result.goalsAwayTeam + game.result.extraTime.goalsAwayTeam};
+            return_object.away.goals = {for: game.result.goalsAwayTeam + game.result.extraTime.goalsAwayTeam, against: game.result.goalsHomeTeam + game.result.extraTime.goalsHomeTeam};
 
             if (game.result.extraTime.goalsHomeTeam > game.result.extraTime.goalsAwayTeam) {
                 return_object.home.resultType = 'W';

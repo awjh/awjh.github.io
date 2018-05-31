@@ -66,7 +66,22 @@ function getPreviousResults(teams, data) {
     $('#previous-results .stats-list .item').each(function(index) {
         const game = data[index];
         if (typeof game !== 'undefined') {
-            $(this).html(`${game.homeTeamName} (${teams[game.homeTeamName].owner}) ${game.result.goalsHomeTeam} - ${game.result.goalsAwayTeam} ${game.awayTeamName} (${teams[game.awayTeamName].owner})`);
+            let goals_home = game.result.goalsHomeTeam;
+            let goals_away = game.result.goalsAwayTeam;
+            let penalty_home = '';
+            let penalty_away = '';
+
+            if (game.result.extraTime) {
+                goals_home += game.result.extraTime.goalsHomeTeam;
+                goals_away += game.result.extraTime.goalsAwayTeam;
+
+                if (game.result.penaltyShootout) {
+                    penalty_home = ` (${game.result.penaltyShootout.goalsHomeTeam}) `;
+                    penalty_away = ` (${game.result.penaltyShootout.goalsAwayTeam}) `;
+                }
+            }
+
+            $(this).html(`${game.homeTeamName} (${teams[game.homeTeamName].owner}) ${goals_home}${penalty_home} - ${penalty_away}${goals_away} ${game.awayTeamName} (${teams[game.awayTeamName].owner})`);
         }
     });
 }
