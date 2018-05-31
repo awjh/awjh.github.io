@@ -1,5 +1,3 @@
-let show_nav = false;
-
 $(document).ready(() => {
     getData(setupPage)
 });

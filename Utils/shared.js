@@ -1,3 +1,5 @@
+let show_nav = false;
+
 function getData (callback) {    
     $.getJSON('teams.json', (json_data) => {
         let owners = [];
@@ -5,7 +7,7 @@ function getData (callback) {
             const team = json_data[key];
             if (!owners.includes(team.owner)) {
                 owners.push(team.owner);
-                $('#nav').append(`<a href="participant.html?person=${team.owner}">${team.owner}</a>`);
+                $('#nav').append(`<a id="${team.owner}" href="participant.html?person=${team.owner}">${team.owner}</a>`);
             }
         });
 
@@ -15,7 +17,7 @@ function getData (callback) {
             dataType: 'json',
             type: 'GET'
         }).done(function(d) {
-            var games = splitPrevAndNext(d);
+            var games = handlePrevAndNext(json_data, d);
             getGoalsScored(json_data, games.prev);
             getPointsScored(json_data, games.prev);
             callback(json_data, games);
@@ -33,14 +35,19 @@ function handleNavBar() {
     }
 }
 
-function splitPrevAndNext(data) {
+function handlePrevAndNext(teams, data) {
     let prev = [];
     let next = [];
 
     data.fixtures.forEach((fixture) => {
         if (fixture.status === 'FINISHED') {
+            let result_objects = getWinnerFromResult(fixture);
+            teams[fixture.homeTeamName].previous_games.push(result_objects.home);
+            teams[fixture.homeTeamName].previous_games.push(result_objects.away);
             prev.push(fixture);
         } else if (fixture.status === 'TIMED' || fixture.status === 'IN_PLAY') {
+            teams[fixture.homeTeamName].next_games.push(fixture.awayTeamName);
+            teams[fixture.awayTeamName].next_games.push(fixture.homeTeamName);
             next.push(fixture);
         }
     });
@@ -69,4 +76,48 @@ function getPointsScored(teams, data) {
             teams[awayTeamName].points_scored += 1;
         }
     });
+}
+
+function getWinnerFromResult(game) {
+    let return_object = {home: {}, away: {}};
+    return_object.home.playing = game.awayTeamName;
+    return_object.home.goals = {for: game.result.goalsHomeTeam, against: game.result.goalsAwayTeam};
+    return_object.away.playing = game.homeTeamName;
+    return_object.away.goals = {for: game.result.goalsAwayTeam, against: game.result.goalsHomeTeam};
+
+    if (game.result.goalsHomeTeam > game.result.goalsAwayTeam) {
+        return_object.home.resultType = 'W';
+        return_object.away.resultType = 'L';
+    } else if (game.result.goalsHomeTeam < game.result.goalsHomeTeam) {
+        return_object.home.resultType = 'L';
+        return_object.away.resultType = 'W';
+    } else {
+        if (game.result.extraTime) {
+            return_object.home.goals = {for: game.result.extraTime.goalsHomeTeam, against: game.result.extraTime.goalsAwayTeam};
+            return_object.away.goals = {for: game.result.extraTime.goalsAwayTeam, against: game.result.extraTime.goalsHomeTeam};
+
+            if (game.result.extraTime.goalsHomeTeam > game.result.extraTime.goalsAwayTeam) {
+                return_object.home.resultType = 'W';
+                return_object.away.resultType = 'L';
+            } else if (game.result.extraTime.goalsHomeTeam < game.result.extraTime.goalsAwayTeam) {
+                return_object.home.resultType = 'L';
+                return_object.away.resultType = 'W';
+            } else {
+                return_object.home.penaltyShootout = {for: game.result.penaltyShootout.goalsHomeTeam, against: game.result.penaltyShootout.goalsAwayTeam};
+                return_object.away.penaltyShootout = {for: game.result.penaltyShootout.goalsAwayTeam, against: game.result.penaltyShootout.goalsHomeTeam};
+
+                if (game.result.penaltyShootout.goalsHomeTeam > game.result.penaltyShootout.goalsAwayTeam) {
+                    return_object.home.resultType = 'W';
+                    return_object.away.resultType = 'L';
+                } else {
+                    return_object.home.resultType = 'W';
+                    return_object.away.resultType = 'L';
+                }
+            }
+        } else {
+            return_object.home.resultType = 'D';
+            return_object.away.resultType = 'D';
+        }
+    }
+    return return_object;
 }
