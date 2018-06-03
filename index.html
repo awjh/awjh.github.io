@@ -1,694 +1,124 @@
 <!doctype html>
 <html>
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Overview</title>
-<script   src="https://code.jquery.com/jquery-1.12.4.js"   integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="   crossorigin="anonymous"></script>
-<script>
-var json = {
-					"users": [
-						{
-							"name": "Nigel Hurt",
-							"teams": ["Albania", "Austria", "Northern Ireland", "Russia", "Spain"]
-						},
-						{
-							"name": "Andrew Hurt",
-							"teams": ["Germany", "Iceland", "Republic of Ireland", "Sweden", "Ukraine"]
-						},
-						{
-							"name": "Alison Hurt",
-							"teams": ["Belgium", "Poland", "Portugal", "Slovakia"]
-						},
-						{
-							"name": "Vanessa Hurt",
-							"teams": ["Croatia", "England", "Turkey", "Italy", "Switzerland",]
-						},
-						{
-							"name": "Annabel Blatch",
-							"teams": ["Czech Republic", "France", "Hungary", "Romania", "Wales"]
-						}
-					],	
-					"teams" : {
-						"Albania": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Austria": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Belgium": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Croatia": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Czech Republic": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"England": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"France": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Germany": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Hungary": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Iceland": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Italy": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Northern Ireland": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Poland": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Portugal": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Republic of Ireland": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Romania": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Russia": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Slovakia": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Spain": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Sweden": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Switzerland": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Turkey": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Ukraine": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						},
-						"Wales": {
-							"goals_scored": 0,
-							"points_scored": 0,
-							"fixtures": [],
-							"next_game": ""
-						}
-					}
-				}
-var colours = ["#85c2eb", "#b3ce56", "#5fbeb7", "#9071b0", "#e94792"]
-
-
-$(document).ready(function(e) {
-	for(var i = json.users.length-1; i >= 0; i--)
-	{
-		$("body").prepend("<div class='user' onclick='focusUser(this, "+i+")' ><div class='userBubble' style='background-image:url(\"Images/"+json.users[i].name.toLowerCase().split(' ').join('_')+".png\"); background-color:"+colours[i]+"'></div><br /><span>"+json.users[i].name+"</span></div>")
-	}
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Standings</title>
+	<script src="Utils/jquery-3.3.1.min.js" ></script>
+	<script src="Utils/shared.js" ></script>
+	<script src="index.js" ></script>
 	
-	$.ajax({
-		  headers: { 'X-Auth-Token': '43e2645aff8f4f838d18ccfbb2c04610' },
-		  url: 'http://api.football-data.org/v1/soccerseasons/424/fixtures',
-		  dataType: 'json',
-		  type: 'GET',
-	}).done(function(d) {
-		getGoalsScored(d)
-		getAveragePoints(d)
-		get_results(d)
-		get_next_games(d)
-	});
-	
-});
-
-function focusUser(el, user_number)
-{
-	$('.usersTeam').fadeOut(1000)
-	setTimeout(function(){$('.usersTeam').remove(); $('#spcer').remove(); $('#goBack').remove();}, 1000)
-	
-	$('.user').not($(el)).not($(el).children('.userBubble')).animate({
-		opacity: 0.2
-	}, 1000)
-	
-	$(el).animate({
-		opacity: 1
-	}, 1000)
-	
-	$('#goBack').animate({
-		opacity: 0
-	}, 1000)
-	
-	$('table').fadeOut(1000);
-	$('#viewStandings').fadeOut(1000)
-	
-	setTimeout(function(){getTeams(el, user_number)}, 1000)
-	
-}
-
-function showNormal(el, user_number)
-{
-	$('.usersTeam').fadeOut(1000)
-	setTimeout(function(){$('.usersTeam').remove(); $('#spcer').remove(); $('#goBack').fadeOut(1000);}, 1000)
-	$('.users').animate({
-		opacity: 1
-	}, 1000)
-	
-	$('#goBack').animate({
-		opacity: 0
-	}, 1000)
-	
-	setTimeout(function(){$('table').fadeIn(1000); $('#viewStandings').fadeIn(1000)}, 1000)
-}
-
-function getTeams(el, user_number)
-{
-	$('body').append('<div id="goBack" onClick="showNormal()"><span>&lt;</span> Back</div><br id="spcer" />')
-	for(var i =0; i < json.users[user_number].teams.length; i++)
-	{
-		$('body').append('<div class="usersTeam"><img src="Images/Teams/'+json.users[user_number].teams[i].toLowerCase().split(' ').join('_')+'.png" width="64"/><span class="usersTeamName">'+json.users[user_number].teams[i]+'</span><br /><span class="teamGoalsScored" >Goals Scored: '+json.teams[json.users[user_number].teams[i]].goals_scored+'</span><span class="teamPointsScored" >Points Scored: '+json.teams[json.users[user_number].teams[i]].points_scored+'</span><br /><span class="teamsResults" >Results: </span><br /><span class="nextGame">Next Game: '+json.teams[json.users[user_number].teams[i]].next_game+'</span></div>');
-		
-		var max_results = 0;
-		for(key in json.teams)
-		{
-			if(json.teams.hasOwnProperty(key))
-			{
-					if(json.teams[key].fixtures.length > max_results)
-					{
-						max_results = json.teams[key].fixtures.length
-					}
-			}
-		}
-		
-		for(var j = 0; j < max_results; j++)
-		{
-			if(typeof json.teams[json.users[user_number].teams[i]].fixtures[j] !== 'undefined')
-			{
-				$('.usersTeam:last-child').children('.teamsResults').append('<span class="teamsResult" ><img src="Images/Teams/'+json.users[user_number].teams[i].toLowerCase().split(' ').join('_')+'.png" width="16"/> '+json.teams[json.users[user_number].teams[i]].fixtures[j].for+' - '+json.teams[json.users[user_number].teams[i]].fixtures[j].against+' <img src="Images/Teams/'+json.teams[json.users[user_number].teams[i]].fixtures[j].played.toLowerCase().split(' ').join('_')+'.png" width="16"/></span>')
-			}
-			else
-			{
-				$('.usersTeam:last-child').children('.teamsResults').append('<span class="spacerResult" ><img src="Images/Teams/white.png" width="16"/>N/A</span>')
-			}
-		}
-		
-	}
-	
-	$('.usersTeam').css({
-        opacity: 0,
-        display: 'inline-block'     
-    }).animate({opacity:1},600);
-	
-	$('#goBack').animate({
-		opacity: 1
-	}, 1000)
-	
-}
-
-function get_next_games(d)
-{
-	var teams = json.teams;
-	for(var i = 0; i < d.fixtures.length; i++)
-	{
-		if(d.fixtures[i].status == "TIMED" && teams[d.fixtures[i].homeTeamName].next_game == "")
-		{
-			teams[d.fixtures[i].homeTeamName].next_game = d.fixtures[i].awayTeamName
-			teams[d.fixtures[i].awayTeamName].next_game = d.fixtures[i].homeTeamName
-		}
-	}
-}
-
-function get_results(d)
-{
-	var teams = json.teams;
-	for(var i = 0; i < d.fixtures.length; i++)
-	{
-		if(d.fixtures[i].status == "FINISHED")
-		{
-			teams[d.fixtures[i].homeTeamName].fixtures.push({"for": d.fixtures[i].result.goalsHomeTeam, "against": d.fixtures[i].result.goalsAwayTeam, "played": d.fixtures[i].awayTeamName})
-			teams[d.fixtures[i].awayTeamName].fixtures.push({"for": d.fixtures[i].result.goalsAwayTeam, "against": d.fixtures[i].result.goalsHomeTeam, "played": d.fixtures[i].homeTeamName})
-		}
-	}
-}
-
-function getGoalsScored(d)
-{	
-	var teams = json.teams;
-	for(var i = 0; i < d.fixtures.length; i++)
-	{
-		if(d.fixtures[i].status == "FINISHED")
-		{
-			teams[d.fixtures[i].homeTeamName].goals_scored += d.fixtures[i].result.goalsHomeTeam
-			teams[d.fixtures[i].awayTeamName].goals_scored += d.fixtures[i].result.goalsAwayTeam
-		}
-	}
-	goals_scored_json = []
-	for (var key in json.teams)
-		  goals_scored_json.push([key, json.teams[key].goals_scored])
-	goals_scored_json.sort(function(a, b) {return b[1] - a[1]})
-	var i =0
-	$('#goals_Scored tbody tr').each(function(){
-		$(this).children('.team_name').html(goals_scored_json[i][0])
-		for(var j = 0; j < json.users.length; j++)
-		{
-			for(var k = 0; k < json.users[j].teams.length; k++)
-			{
-				if(json.users[j].teams[k] == goals_scored_json[i][0])
-				{
-						$(this).children('.team_name').append('<div class="markTeam" style="background-color:'+colours[j]+'" ></div>')
-				}
-			}
-		}
-		$(this).children('.value').html(goals_scored_json[i][1])
-		i++
-	})	
-}
-
-function getAveragePoints(d)
-{
-	var points = {};
-	for(var i = 0; i < json.users.length; i++)
-	{
-		points[json.users[i].name] = 0
-	}
-	
-	for(var i = 0; i < d.fixtures.length; i++)
-	{
-		if(d.fixtures[i].status == "FINISHED")
-		{
-			var homePoints;
-			var awayPoints; 
-			if(d.fixtures[i].result.goalsHomeTeam == d.fixtures[i].result.goalsAwayTeam)
-			{
-				homePoints = 1;
-				awayPoints = 1;
-			}
-			else if(d.fixtures[i].result.goalsHomeTeam > d.fixtures[i].result.goalsAwayTeam)
-			{
-				homePoints = 3;
-				awayPoints = 0;
-			}
-			else if(d.fixtures[i].result.goalsHomeTeam < d.fixtures[i].result.goalsAwayTeam)
-			{
-				homePoints = 0;
-				awayPoints = 3;
-			}
-			
-			json.teams[d.fixtures[i].homeTeamName].points_scored += homePoints;
-			json.teams[d.fixtures[i].awayTeamName].points_scored += awayPoints;
-			
-			for(var j = 0; j < json.users.length; j++)
-			{
-				for(var k = 0; k < json.users[j].teams.length; k++)
-				{
-					if(json.users[j].teams[k] == d.fixtures[i].homeTeamName)
-					{
-						points[json.users[j].name] += homePoints
-					}
-					if(json.users[j].teams[k] == d.fixtures[i].awayTeamName)
-					{
-						points[json.users[j].name] += awayPoints
-					}
-				}
-			}
-				
-		}
-	}
-	
-	for(var j = 0; j < json.users.length; j++)
-	{
-		console.log(json.users[j].name+': '+points[json.users[j].name]+'.....'+json.users[j].teams.length)
-
-		points[json.users[j].name] = points[json.users[j].name]/json.users[j].teams.length
-		points[json.users[j].name] = Math.round(points[json.users[j].name] * 10) / 10
-	}
-	var sortable = [];
-	for (var key in points)
-		  sortable.push([key, points[key]])
-	sortable.sort(function(a, b) {return b[1] - a[1]})
-	var i = 0;
-	$('#points_Scored tbody tr').each(function(){
-		$(this).children('.team_name').html(sortable[i][0])
-		$(this).children('.value').html(sortable[i][1])
-		i++
-	})	
-}
-
-</script>
-<style>
-	@font-face {
-		font-family: 'robotothin';
-		src: url('Fonts/Roboto/roboto-thin-webfont.eot');
-		src: url('Fonts/Roboto/roboto-thin-webfont.eot?#iefix') format('embedded-opentype'),
-			 url('Fonts/Roboto/roboto-thin-webfont.woff2') format('woff2'),
-			 url('Fonts/Roboto/roboto-thin-webfont.woff') format('woff'),
-			 url('Fonts/Roboto/roboto-thin-webfont.ttf') format('truetype'),
-			 url('Fonts/Roboto/roboto-thin-webfont.svg#robotothin') format('svg');
-		font-weight: normal;
-		font-style: normal;
-	
-	}
-	body
-	{
-		text-align:center;
-		font-family: 'robotothin';
-	}
-	.user
-	{
-		color: #666;
-		display:inline-block;	
-		text-align:center;
-		margin-left:25px;
-		margin-right:25px;
-		margin-top:50px;
-		text-align:center;
-		font-size: 1.2em;
-	}
-	.userBubble
-	{
-		height: 100px;
-		width: 100px;
-		border-radius:50%;
-		background-repeat:no-repeat;
-		background-position:center;
-		display:inline-block;
-		cursor:pointer;
-	}
-	.usersTeam
-	{
-		margin-left:40px;
-		margin-right: 40px;
-		margin-top: 50px;
-		display:inline-block;
-		width: 425px;
-		cursor:pointer;
-		color: #666;
-		font-size:1.2em;
-		text-align:left;
-		display:none;
-	}
-	.usersTeam img
-	{
-		border-radius:50%;
-		background-color: #CCC;
-		margin-top:32px;
-	}
-	.usersTeam span
-	{
-		display:block;
-		margin-left: 75px;
-	}
-	.usersTeamName
-	{
-		margin-left: 72px!important;	
-		margin-top:-64px!important;
-		font-size: 2em;
-	}
-	.teamGoalsScored
-	{
-		margin-top:-20px;	
-	}
-	.teamsResult
-	{
-		margin-left:0!important;	
-		margin-top: -20px;
-	}
-	.spacerResult
-	{
-		margin-left:0!important;	
-		margin-top: -20px;
-		color: #FFF;
-	}
-	.spacerResult img
-	{
-		opacity: 0;
-	}
-	#goBack
-	{
-		line-height:40px;
-		background-color: #68a4d9;
-		display:inline-block;
-		text-align:center;
-		padding-right: 10px;
-		color: #FFF;
-		margin-top: 50px;
-		font-size: 1.2em;
-		cursor:pointer;
-		opacity: 0;
-	}
-	#goBack span
-	{
-		display:inline-block;
-		width: 40px;
-		background-color: #5c92cd;
-		margin-right:5px;
-	}
-	.tally_tables
-	{
-		margin-top:50px;
-		display:inline-block;
-		width: 425px;
-		border: 3px solid;
-		border-collapse:collapse;
-		margin-left: 12.5px;
-		margin-right: 12.5px;
-	}
-	.tally_tables th
-	{
-		text-align:left;
-		color: #ededed;
-		font-size: 1.2em;
-		line-height:40px;
-	}
-	.tally_tables td
-	{
-		font-size: 0.8em;
-		line-height:40px;
-		border-bottom:2px solid #9d9d9c;
-		color: #666;
-	}
-	.tally_tables tr:last-child td
-	{
-		border-bottom:0;
-	}
-	.tally_tables tbody tr:nth-child(even) {
-		background-color: #f6f6f6;
-	}
-	.tally_tables tbody tr:nth-child(odd) {
-		background-color: #ededed;
-	}
-	.position
-	{
-		width: 40px;
-		border-right:2px solid #9d9d9c;
-	}
-	.team_name
-	{
-		width: 340px;
-		border-right:2px solid #9d9d9c;	
-		text-align:left;
-		padding-left: 5px;
-	}
-	.value
-	{
-		width: 40px;
-	}
-	#goals_Scored
-	{
-		background-color: #f39675;
-		border-color: #f39675;
-	}
-	#points_Scored
-	{
-		background-color: #ea5154;
-		border-color: #ea5154;
-	}
-	.markTeam
-	{
-		display:inline-block;
-		float:right;
-		margin-right: 10px;
-		height: 20px;
-		width: 20px;
-		border-radius:50%;
-		margin-top:10px;
-	}
-	#viewStandings
-	{
-		line-height:40px;
-		background-color: #68a4d9;
-		display:inline-block;
-		text-align:center;
-		padding-left: 10px;
-		color: #FFF;
-		margin-top: 50px;
-		font-size: 1.2em;
-		cursor:pointer;
-	}
-	#viewStandings span
-	{
-		display:inline-block;
-		width: 40px;
-		background-color: #5c92cd;
-		margin-left: 10px;
-	}
-	#logo
-	{
-		margin-top: 50px;	
-	}
-</style>
+	<link rel = "stylesheet" type = "text/css" href = "main.css" />
+  </head>
 </head>
-	<br />
-	<table class="tally_tables" id="goals_Scored">
-    	<thead>
-        	<tr>
-        		<th colspan="3">Goals Scored</th>
-       		</tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="position">1</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">2</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">3</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">4</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">5</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-    	<tbody>
-    </table>
-    <table class="tally_tables" id="points_Scored">
-    	<thead>
-        	<tr>
-        		<th colspan="3">Average Points</th>
-       		</tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="position">1</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">2</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">3</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">4</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-            <tr>
-                <td class="position">5</td>
-                <td class="team_name"></td>
-                <td class="value"></td>
-            </tr>
-    	</tbody>
-    </table>
-    <br />
-    <div id="viewStandings" onClick="window.open('http://www.uefa.com/uefaeuro/season=2016/standings/')">
-    	View Standings<span>&gt;</span>
-    </div>
-    <br />
 <body>
+	<div id="holder" >
+		<div id="header" >
+			<a class="title" href="index.html" >Hurt Family - World Cup 2018</a>
+			<div id="nav-button" onclick="handleNavBar()" >
+				&#9776;
+			</div>
+			<div id="nav" ></div>
+		</div>
+		<div id="standings-holder" >
+			<div class="stats" id="goals-scored" >
+				<div class="title" >
+					Goals Scored:
+				</div>
+				<br />
+				<div class="stats-table" >
+					<div class="row" >
+						<span>1</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>2</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>3</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>4</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>5</span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="stats" id="average-points" >
+				<div class="title" >
+					Average Points:
+				</div>
+				<br />
+				<div class="stats-table" >
+					<div class="row" >
+						<span>1</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>2</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>3</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>4</span>
+						<span></span>
+						<span></span>
+					</div>
+					<div class="row" >
+						<span>5</span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
+			</div>
+			
+			<div class="stats" id="upcoming-matches" >
+				<div class="title" >
+					Upcoming Matches:
+				</div>
+				<br />
+				<div class="no-display" >No upcoming matches</div>
+				<div class="stats-list" >
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+				</div>
+			</div>
+
+			<div class="stats" id="previous-results" >
+				<div class="title" >
+					Previous Results:
+				</div>
+				<br />
+				<div class="no-display" >No previous results</div>
+				<div class="stats-list" >
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+					<div class="item" >&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
