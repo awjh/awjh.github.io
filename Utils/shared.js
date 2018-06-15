@@ -43,7 +43,7 @@ function handlePrevAndNext(teams, data) {
         if (fixture.status === 'FINISHED') {
             let result_objects = getWinnerFromResult(fixture);
             teams[fixture.homeTeamName].previous_games.push(result_objects.home);
-            teams[fixture.homeTeamName].previous_games.push(result_objects.away);
+            teams[fixture.awayTeamName].previous_games.push(result_objects.away);
             prev.push(fixture);
         } else if (fixture.status === 'TIMED' || fixture.status === 'IN_PLAY') {
             teams[fixture.homeTeamName].next_games.push(fixture.awayTeamName);
@@ -93,7 +93,7 @@ function getWinnerFromResult(game) {
     if (game.result.goalsHomeTeam > game.result.goalsAwayTeam) {
         return_object.home.resultType = 'W';
         return_object.away.resultType = 'L';
-    } else if (game.result.goalsHomeTeam < game.result.goalsHomeTeam) {
+    } else if (game.result.goalsHomeTeam < game.result.goalsAwayTeam) {
         return_object.home.resultType = 'L';
         return_object.away.resultType = 'W';
     } else {

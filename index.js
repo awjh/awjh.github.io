@@ -32,7 +32,7 @@ function getAveragePoints(teams, data) {
 
     Object.keys(owners).forEach((name) => {
         let owner = owners[name];
-        owner.average_points = owner.points_scored/owner.num_teams;
+        owner.average_points = (owner.points_scored/owner.num_teams).toFixed(2);
     });
 
     let data_as_array = getDisplayData(owners);
