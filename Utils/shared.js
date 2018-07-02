@@ -115,8 +115,8 @@ function getWinnerFromResult(game) {
                     return_object.home.resultType = 'W';
                     return_object.away.resultType = 'L';
                 } else {
-                    return_object.home.resultType = 'W';
-                    return_object.away.resultType = 'L';
+                    return_object.home.resultType = 'L';
+                    return_object.away.resultType = 'W';
                 }
             }
         } else {
